@@ -1,0 +1,116 @@
+#include <iostream>
+#include <fstream>
+#include<cstdlib>
+#include "include/fiber.h"
+#include "include/network.h"
+#include "include/vector.h"
+#include "include/equations.h"
+#include "include/SingleNet.h"
+#include "include/mgmres.h"
+
+using namespace std;
+
+int main()
+{
+  // double a, b,c;
+  // double *nodes;
+  // int i, j;
+  // ifstream infile;
+  // string filename;
+
+  // fiber *F;
+
+  // F = (fiber *)calloc(10, sizeof(fiber));
+
+  // filename = "net_1.del";
+
+  // infile.open(filename.c_str());
+
+  // infile >> a >> b >> c;
+
+  // nodes = (double *) calloc(20 , sizeof(double));
+
+  // for(i=0; i<20; i++)
+  //   {
+  //     infile >> nodes[i];
+  //   }
+
+  // infile.close();
+
+  // cout << a << b << c << endl;
+  // cout << endl;
+  // cout << "Nodes array is : "<< endl;
+  // for(i=0;i<2;i++)
+  //   {
+  //     for(j=0;j<10;j++)
+  // 	{
+  // 	  cout << nodes[10*i + j];
+  // 	}
+  //     cout << endl;
+  //   }
+  // cout << endl;
+
+  DisplayMsg("start", "NA");
+  network Net;
+  vector f;
+  double *J;
+  f.x = 2;
+  f.y = 1;
+  f.z = 1;
+
+  Net.readNetwork( "net_1.del" );
+
+  std::cout << Net.N_fibs << "  " << Net.N_nodes << std::endl;
+ 
+  Net.updateNetwork();
+  std::cout << Net.fibers[0].getLength() << std::endl;
+
+  Net.getFibForces();
+  DisplayMsg("warning", "Network not stretched\nApply stretchNetwork()");
+  std::cout << "Force 5(1) : " << Net.forces[5].getMagnitude() << std::endl;
+
+  Net.stretchNetwork(f);
+
+  Net.getFibForces();
+
+  std::cout << "Force 5(2) : " <<  Net.forces[5].getMagnitude() << std::endl;
+  std::cout << Net.forces[5].x << "i + "<<Net.forces[5].y<<"j"<< std::endl;
+
+
+  // std::cout << Net.fibers[0].node1 << "  " << Net.fibers[0].node2 << std::endl;
+  // J = Net.getJacobian();
+
+  J = (double *)calloc(5*5, sizeof(double));
+
+  J[0] = 10.34; J[6] = 2.34; J[12] = -9.87; J[18] = 21.32; J[24] = -1.34;
+  J[10] = -9.45; J[2] = -9.45; J[17] = -7.4; J[13] = -7.4;
+
+  std::cout << "Size of forces = " << Net.N_nodes << std::endl;
+
+  std::cout << "---------------------------\n";
+
+  double x[5];
+  double *RHS;
+  int i;
+  int *ia;
+  int *ja;
+  double *Annz;
+
+  for (i=0; i<5; i++)
+    {
+      x[i] = 0.0;
+    }
+
+  // RHS = vector2array(Net.forces, Net.N_nodes);
+  RHS = (double *)calloc(5, sizeof(double));
+  RHS[0] = 1.2; RHS[1] = 9.64; RHS[2] = -2.1; RHS[3] = 0.98; RHS[4] = -8.2;
+  int nnz = SparseTriplet(5, J, ia, ja, Annz);
+
+  std::cout << "ia : " << ja[0]<<"  " <<  ja[0]  << std::endl;
+  std::cout << "A = " << Annz[0]<< "\n";
+  mgmres_st(5, nnz, ia, ja, Annz, x, RHS, 4, 4, 1e-7, 1e-4);
+  std::cout << "x[5] = " << x[1] << std::endl;
+  std::cout << "x[10] = " << x[2] << std::endl;
+
+  std::cout << "All good!" << std::endl;
+}

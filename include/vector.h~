@@ -1,0 +1,19 @@
+// VECTOR.H
+// Defines class vector and tensor
+
+///..........................................................................///
+
+#pragma once
+#include <cmath>
+
+class vector
+{
+ public:
+
+  double x, y, z; // X, Y and Z components of vector
+
+  vector(){x = 0; y = 0; z = 0;} // Constructor function
+
+
+  double getMagnitude() const {return sqrt(x*x + y*y + z*z );} // Get vector norm
+};

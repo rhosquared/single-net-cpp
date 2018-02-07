@@ -1,0 +1,20 @@
+#include <cmath>
+#include "fiber.h"
+
+void updateFibLength(fiber a)
+{
+  if(a.node1 == a.node2)
+    {
+      a.fib_length = 0;
+      return;
+    }
+  double del_x = a.n1x - a.n2x;
+  double del_y = a.n1y - a.n2y;
+  double del_z = a.n1z - a.n2z;
+
+  a.fib_length = sqrt(del_x*del_x + del_y*del_y + del_z*del_z);
+
+  return;
+
+
+}

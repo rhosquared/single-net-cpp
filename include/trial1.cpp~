@@ -1,0 +1,21 @@
+#include <iostream>
+#include <cmath>
+#include "fiber.h"
+
+int main()
+{
+  fiber A;
+
+  A.n2x = 2;
+  A.n2y = 3;
+
+  fiber::updateFibLength(A);
+
+  double len = A.getLength();
+
+  std::cout << "Length of fiber is " << len << std::endl;
+
+
+
+
+}

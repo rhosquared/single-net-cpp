@@ -1,0 +1,20 @@
+// EQUATIONS.H
+// Contains definition of constitutive equation classes
+// 1. LinearSpring
+
+///..........................................................................///
+
+#pragma once
+
+//1...........................................................................
+
+class LinearSpring
+{
+ public :
+
+  double k; // Spring stiffness
+
+  double getForce(double lambda); // Function to calculate force
+
+  // Might have to include function to calculate dF/dX too!
+};
